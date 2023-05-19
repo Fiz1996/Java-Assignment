@@ -3,10 +3,12 @@ package com.example.tree.service.impl;
 import com.example.tree.entity.StatementEntity;
 import com.example.tree.repository.StatementRepository;
 import com.example.tree.service.StatementService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
+@Slf4j
 @Service
 public class StatementServiceImpl implements StatementService {
 
@@ -22,7 +24,9 @@ public class StatementServiceImpl implements StatementService {
     }
 
     public List<StatementEntity> findByAccountId(Long accountId) {
-        return statementRepository.findByAccountId(accountId).orElse(null);
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime threeMonthsBefore = today.minusMonths(3);
+        return statementRepository.findByAccountId(accountId,today,threeMonthsBefore).orElse(null);
     }
 
     public List<StatementEntity> findByAccountIdAndDate(Long accountId , String start, String end) {
